@@ -8,3 +8,9 @@ Noterbooks: criados pela aplicação da Jetbrains - Datalore
              inclui notebook despesas_senado
              inclui notebook receitas_senado
              upload arquivos tratados
+
+25/05/2021 - correção e finalização script despesas_senado
+               >> criação backup
+               >> correção saída
+             upload arquivo despesas_senado.py
+             upload arquivo despesas_senado_backup.py
