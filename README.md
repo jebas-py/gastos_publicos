@@ -14,3 +14,8 @@ Noterbooks: criados pela aplicação da Jetbrains - Datalore
                >> correção saída
              upload arquivo despesas_senado.py
              upload arquivo despesas_senado_backup.py
+             finalização script remuneracao_servidores_senado
+             upload arquivo remuneracao_servidores_senado.py
+             upload arquivo remuneracao_servidores_senado_backup.csv
+             upload arquivo remuneracao_servidores_senado.csv
+             
