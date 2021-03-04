@@ -1,105 +1,119 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Bibliotecas
+# # Versão e Bibliotecas
 
-# In[1]:
+# In[9]:
 
 
+#versão do Pandas utilizada foi a '1.1.3 / se houver atualização o notebook instalará versão original
 import pandas as pd
+
+versao = pd.__version__
+
+if versao != '1.1.3':
+    get_ipython().system('pip install pandas==1.1.3')
+    print(f'Pandas versão alterada para {versao}')
+else:
+    print(f'Pandas versão: {versao}')
 
 
 # # Backup arquivo anterior
 
-# In[5]:
+# In[2]:
 
 
-backup = pd.read_csv(
-    'despesas_senado.csv',
-    engine='python',
-    delimiter=';'    
-)
+try:
+    backup = pd.read_csv(
+        'despesas_senado.csv',
+        engine='python',
+        delimiter=';',
+        encoding='utf-8'
+    )
 
-backup.to_csv(
-    'despesas_senado_backup.csv',
-    sep=';',
-    encoding='utf-8',
-    index=False
-)
-
-
-# ## Dados Backup
-
-# In[13]:
-
-
-data_carga_anterior = backup['data_carga'].unique()[0]
-linhas_anterior = backup.shape[0]
-colunas_anterior = backup.shape[1]
-
-print(f'DATA CARGA DE DADOS DO BACKUP: {data_carga_anterior}.')
-print(f'VOLUME CARGA DE DADOS BACKUP: {linhas_anterior} LINHAS E {colunas_anterior} COLUNAS.')
+    backup.to_csv(
+        'despesas_senado_backup.csv',
+        sep=';',
+        encoding='utf-8',
+        index=False
+    )
+    print('BACKUP = OK')
+except Exception as erro:
+    print('BACKUP = ERRO')
+    print(erro)
 
 
 # # Extração dados da web
 
 # ## Despesas ATUAL
 
-# In[9]:
+# In[3]:
 
 
-despesas = pd.read_csv(
-    'http://www.senado.gov.br/bi-arqs/Arquimedes/Financeiro/DespesaSenado.csv',
-    engine='python',
-    delimiter=';',
-    encoding='utf-8'
-)
+try:
+    despesas = pd.read_csv(
+        'http://www.senado.gov.br/bi-arqs/Arquimedes/Financeiro/DespesaSenado.csv',
+        engine='python',
+        delimiter=';',
+        encoding='utf-8'
+    )
+    print('EXTRAÇÃO WEB = OK')
+except Exception as erro:
+    print('extração web = erro')
+    print(erro)
 
 
 # ## Data carga de dados ATUAL
 
-# In[10]:
+# In[5]:
 
 
 data_carga_atual = despesas['Data da Carga da Base'].unique()[0]
 linhas_atual, colunas_atual = despesas.shape
 
 print(f'DATA CARGA DE DADOS ATUAL: {data_carga_atual}.')
-print(f'VOLUME DA CARGA DE DADOS ATUAL: {linhas_atual} LINHAS E {colunas_atual} COLUNAS.')
+print(f'VOLUME DA CARGA DE DADOS: {linhas_atual} LINHAS E {colunas_atual} COLUNAS.')
 
 
 # ## Informações da base
 
-# In[11]:
+# In[8]:
 
 
-print(despesas.info())
+print('INFORMAÇÕES DA BASE DE DADOS')
+print( '=-' * 30)
+despesas.info()
 
 
 # ## Tratamento
 
 # ### Excluir colunas desnecessárias
 
-# In[33]:
+# In[9]:
 
 
-despesas.drop(
-    columns=[
-        'Ação (código)', 
-        'Plano Orçamentário (código)', 
-        'Grupo de Despesa (código)',
-        'Resultado Lei (código)',
-        'Resultado Lei (nome)',
-        'Modalidade de Aplicação (código)',
-        'Fonte (código)'
-    ],
-    inplace=True
-)
+try:
+    despesas.drop(
+        columns=[
+            'Ação (código)', 
+            'Plano Orçamentário (código)', 
+            'Grupo de Despesa (código)',
+            'Resultado Lei (código)',
+            'Resultado Lei (nome)',
+            'Modalidade de Aplicação (código)',
+            'Fonte (código)'
+        ],
+        inplace=True
+    )
+    print('EXCLUSÃO COLUNAS = OK')
+except Exception as erro:
+    print('EXCLUSÃO COLUNAS = ERRO')
+    print(erro)
 
 
 # ### Renomear colunas
 
-# In[34]:
+# In[10]:
 
 
 #lista com novos nomes de colunas
@@ -108,42 +122,55 @@ lista_colunas = ['data_carga', 'exercicio_financeiro', 'acao', 'plano_orcamentar
     'valor_liquidado','valor_pago']
 
 #iteração entre a lista e as colunas do DataFrame para criar o dicionário com os novos nomes
-dicionario_colunas = {}
-for i in range(len(despesas.columns)):
-    dicionario_temp = {despesas.columns[i]: lista_colunas[i]}
-    dicionario_colunas.update(dicionario_temp)
+try:
+    dicionario_colunas = {}
+    for i in range(len(despesas.columns)):
+        dicionario_temp = {despesas.columns[i]: lista_colunas[i]}
+        dicionario_colunas.update(dicionario_temp)
 
-#altera o nome das colunas no DataFrame
-despesas.rename(
-    columns=dicionario_colunas,
-    inplace=True
-)
+    #altera o nome das colunas no DataFrame
+    despesas.rename(
+        columns=dicionario_colunas,
+        inplace=True
+    )
+    print('RENOMEAR COLUNAS = OK')
+except Exception as erro:
+    print('RENOMEAR COLUNAS = ERRO')
+    print(erro)
 
 
 # ### Ajuste da categoria das variáveis
 
-# In[35]:
+# In[11]:
 
 
 lista_colunas = ['valor_dotacao_inicial', 'valor_dotacao_atualizado', 'valor_total_empenhado','valor_liquidado','valor_pago']
 
-for coluna in lista_colunas:
-    despesas[coluna] = despesas[coluna].str.replace(',', '.')
-    despesas[coluna] = despesas[coluna].astype(dtype=float)
+try:
+    for coluna in lista_colunas:
+        despesas[coluna] = despesas[coluna].str.replace(',', '.')
+        despesas[coluna] = despesas[coluna].astype(dtype=float)
+    print('ALTERAÇÃO DTYPES = OK')
+except Exception as erro:
+    print('ALTERAÇÃO DTYPES = ERRO')
+    print(erro)
 
 
-# In[15]:
+# ## Informações Final da Base
+
+# In[1]:
 
 
-print('DADOS DO ARQUIVO SALVO')
-print(despesas.info())
+print('INFORMAÇÕES FINAL DA BASE DE DADOS')
+print( '=-' * 30)
+despesas.info()
 
 
 # ## Gravar arquivo modificado
 
 # ### <font color=red>Somente fazer a gravação e sobreposição do arquivo se verificado que o mesmo está OK
 
-# In[40]:
+# In[13]:
 
 
 try:   
@@ -153,8 +180,15 @@ try:
         encoding='utf-8',
         index=False
     )
-    print('ARQUIVO SALVO NO DIRETÓRIO')
-    print('Publicam Data >> Subprojetos >> gastos_publicos >> notebooks')
-except:
-    print('ERRO AO SALVAR O ARQUIVO.')
+    print('GRAVAÇÃO ARQUIVO = OK')
+    print('ARQUIVO SALVO NO DIRETÓRIO: PUBLICAM DATA >> SUBPROJETOS >> GASTOS_PUBLICOS >> SENADO_FEDERAL')
+except Exception as erro:
+    print('GRAVAÇÃO ARQUIVO = ERRO')
+    print(erro)
+
+
+# In[ ]:
+
+
+
 
