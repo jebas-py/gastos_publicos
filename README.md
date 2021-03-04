@@ -1,21 +1,8 @@
 # gastos_publicos
 Repositório do projeto Gastos públicos
-Noterbooks: criados pela aplicação da Jetbrains - Datalore
-
-22/02/2021 - adição do notebook com o script para tratamento da base despesas_senado; 
-             ajuste encoding;
-             exclui notebook gastos_publicos_senado
-             inclui notebook despesas_senado
-             inclui notebook receitas_senado
-             upload arquivos tratados
-
-25/05/2021 - correção e finalização script despesas_senado
-               >> criação backup
-               >> correção saída
-             upload arquivo despesas_senado.py
-             upload arquivo despesas_senado_backup.py
-             finalização script remuneracao_servidores_senado
-             upload arquivo remuneracao_servidores_senado.py
-             upload arquivo remuneracao_servidores_senado_backup.csv
-             upload arquivo remuneracao_servidores_senado.csv
-             
+fontes de dados:
+SENADO
+servidores = http://www.senado.gov.br/transparencia/LAI/secrh/todos_csv.csv
+gastos = http://www.senado.gov.br/bi-arqs/Arquimedes/Financeiro/DespesaSenado.csv
+remuneração = http://www.senado.leg.br/transparencia/LAI/secrh/SF_ConsultaRemuneracaoServidoresParlamentares_202101.csv
+OBS.: acesso pelo link é com os dados parciais
